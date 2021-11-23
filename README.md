@@ -1,2 +1,2 @@
 # CFG_project
-CFG project
+CFG project - Group 4
