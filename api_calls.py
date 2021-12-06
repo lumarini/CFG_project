@@ -81,15 +81,22 @@ class CallingAPI(PrepForAPI):
         super().__init__()
         self.result = []
         self.films = []
+        self.chosen_parameters = {
+            "api_key": "43c96095652d8dd6ac3f404242b593fe",
+            "sort_by": "popularity.desc",
+            "certification_country": "GB",
+            "certification": super().age_ratings(),
+            "with_genres": super().genres(),
+            "with_runtime.gte": super().lower_runtime(),
+            "with_runtime.lte": super().upper_runtime(),
+            "vote_average.gte": super().rating()
+            }
 
-    def api_call(self):
+    def api_call(self, parameters):
         # calls the api, if any of the categories are blank, the call will still be made, the results just won't be
         # filtered on the category
-        url = f"https://api.themoviedb.org/3/discover/movie?api_key=43c96095652d8dd6ac3f404242b593fe" \
-            f"&sort_by=popularity.desc&certification_country=GB&certification={super().age_ratings()}" \
-            f"&with_genres={super().genres()}&with_runtime.gte={super().lower_runtime()}" \
-            f"&with_runtime.lte={super().upper_runtime()}&vote_average.gte={super().rating()}"
-        response = requests.get(url)
+        url = f"https://api.themoviedb.org/3/discover/movie"
+        response = requests.get(url, params=parameters)
         self.result = response.json()
         self.films = self.result["results"]
 
@@ -101,7 +108,7 @@ class SortingAPI(CallingAPI):
         self.count = 1
 
     def sorting_data(self):
-        super().api_call()  # makes the call to the API so the data can then be sorted
+        super().api_call(self.chosen_parameters)  # makes the call to the API so the data can then be sorted
         for each_film in self.films:  # gets the relevant data for each film and puts it into a dictionary
             part_poster_path = each_film["poster_path"]
             full_poster_path = f"https://image.tmdb.org/t/p/original/{part_poster_path}"
