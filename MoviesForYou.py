@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, flash, redirect
 # from flask_sqlalchemy import SQLAlchemy
-from forms import RegistrationForm, LoginForm, Input_User
+from forms import RegistrationForm, LoginForm, InputUser
 from api_calls import SortingAPI
 app = Flask(__name__)
 
@@ -28,7 +28,7 @@ posts = [
         "fav_movie": "High School Musical"
     },
     {
-        "name": "Lizze",
+        "name": "Lizzie",
         "about_me": "I feel like a kid again when I go to the movies!",
         "fav_movie": "Cats and Dogs"
     },
@@ -50,16 +50,19 @@ posts = [
 
 ]
 
+
 @app.route("/")
 @app.route("/home")
 def home():
     return render_template('home.html', posts=posts)
 
+
 @app.route("/what_to_watch", methods=['GET', 'POST'])
 def what_to_watch():
-    form = Input_User()
+    form = InputUser()
     SortingAPI(form.rating.data, form.genre.data, form.run_time.data).sorting_data()
     return render_template('what_to_watch.html', title='What To Watch', form=form)
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -69,15 +72,12 @@ def register():
         return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)
 
+
 @app.route("/login")
 def login():
     form = LoginForm()
     return render_template('login.html', title='Login', form=form)
 
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
-

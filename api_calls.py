@@ -20,10 +20,8 @@ class PrepForAPI:  # sorts the data into the correct format to make the API call
         self.all_genres = ""
 
     def age_ratings(self):  # Joins all the selected age ratings together in the correct format
-        print(self.all_age_rating)
-        self.all_age_rating = str(self.all_age_rating)
-        print(self.all_age_rating)
-        self.age_rating_list = self.all_age_rating.split(", ")
+        self.chosen_age_ratings = str(self.chosen_age_ratings)
+        self.age_rating_list = self.chosen_age_ratings.split(", ")
         self.all_age_rating = "|".join(self.age_rating_list)
         return self.all_age_rating
 

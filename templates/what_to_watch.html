@@ -2,36 +2,36 @@
 {% block content %}
     <h3>Find the movie you want to watch down below!</h3>
     <br>
-            <div class="content-section">
-                <form method="POST" action="">
-                    {{ form.hidden_tag() }}
-                    <fieldset class="form-group mb-4">
-                     <legend class="border-bottom mb-4">What To Watch</legend>
-                        <div class="form-group mb-4">
-                            {{ form.genre.label(class="form-control-label") }}
-                            {% if form.genre.errors %}
-                                {{ form.genre(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form.genre.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.genre(class="form-control form-control-lg") }}
-                            {% endif %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group mb-4">
+                <legend class="border-bottom mb-4">What To Watch</legend>
+                <div class="form-group mb-4">
+                    {{ form.genre.label(class="form-control-label") }}
+                    {% if form.genre.errors %}
+                        {{ form.genre(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.genre.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.genre(class="form-control form-control-lg") }}
+                    {% endif %}
                 </div>
-                 <div class="form-group mb-4">
-                            {{ form.rating.label(class="form-control-label") }}
-                            {% if form.rating.errors %}
-                                {{ form.rating(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form.rating.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                 </div>
-                            {% else %}
-                                {{ form.genre(class="form-control form-control-lg") }}
-                            {% endif %}
+                <div class="form-group mb-4">
+                    {{ form.rating.label(class="form-control-label") }}
+                    {% if form.rating.errors %}
+                        {{ form.rating(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.rating.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.rating(class="form-control form-control-lg") }}
+                    {% endif %}
                 </div>
                 <div class="form-group mb-4">
                     {{ form.run_time.label(class="form-control-label") }}
@@ -51,4 +51,5 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
+    </div>
 {% endblock content %}
