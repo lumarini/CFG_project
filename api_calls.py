@@ -2,27 +2,35 @@ import requests
 
 
 class PrepForAPI:  # sorts the data into the correct format to make the API call
-    def __init__(self):
+    def __init__(self, age_rating, genres, lower_runtime):
         # options = 15, R18, U, PG, 12A, 12, 18
-        self.chosen_age_ratings = ["15", "12"]  # needs replacing with input from front end
-        self.chosen_genres = ["action", "comedy"]  # needs replacing with input from front end
+        self.chosen_age_ratings = age_rating  # needs replacing with input from front end
+        self.chosen_genres = genres  # needs replacing with input from front end
         # in mins
-        self.chosen_lower_runtime = 120  # needs replacing with input from front end
+        self.chosen_lower_runtime = lower_runtime  # needs replacing with input from front end
         # in mins
-        self.chosen_upper_runtime = 120  # needs replacing with input from front end
-        # from 0 to 10
-        self.chosen_rating = 7.4  # needs replacing with input from front end
+        # self.chosen_upper_runtime = upper_runtime  # needs replacing with input from front end
+        # # from 0 to 10
+        # self.chosen_rating = rating  # needs replacing with input from front end
+        self.age_rating_list = []
         self.all_age_rating = ""
+        self.genres_list = []
         self.capitalize_genres = []
         self.number_genres = []
         self.all_genres = ""
 
     def age_ratings(self):  # Joins all the selected age ratings together in the correct format
-        self.all_age_rating = "|".join(self.chosen_age_ratings)
+        print(self.all_age_rating)
+        self.all_age_rating = str(self.all_age_rating)
+        print(self.all_age_rating)
+        self.age_rating_list = self.all_age_rating.split(", ")
+        self.all_age_rating = "|".join(self.age_rating_list)
         return self.all_age_rating
 
     def genres(self):  # Changes the genres to the corresponding number and joins them together in the correct format
-        for chosen_genre in self.chosen_genres:
+        self.chosen_genres = str(self.chosen_genres)
+        self.genres_list = self.chosen_genres.split(", ")
+        for chosen_genre in self.genres_list:
             self.capitalize_genres.append(chosen_genre.title())
         for chosen_genre in self.capitalize_genres:
             if chosen_genre == "Action":
@@ -69,16 +77,16 @@ class PrepForAPI:  # sorts the data into the correct format to make the API call
     def lower_runtime(self):  # Returns the chosen lower runtime
         return self.chosen_lower_runtime
 
-    def upper_runtime(self):  # Returns the chosen upper runtime
-        return self.chosen_upper_runtime
-
-    def rating(self):  # Returns the rating
-        return self.chosen_rating
+    # def upper_runtime(self):  # Returns the chosen upper runtime
+    #     return self.chosen_upper_runtime
+    #
+    # def rating(self):  # Returns the rating
+    #     return self.chosen_rating
 
 
 class CallingAPI(PrepForAPI):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, age_rating, genres, lower_runtime):
+        super().__init__(age_rating, genres, lower_runtime)
         self.result = []
         self.films = []
         self.chosen_parameters = {
@@ -88,13 +96,14 @@ class CallingAPI(PrepForAPI):
             "certification": super().age_ratings(),
             "with_genres": super().genres(),
             "with_runtime.gte": super().lower_runtime(),
-            "with_runtime.lte": super().upper_runtime(),
-            "vote_average.gte": super().rating()
+            # "with_runtime.lte": super().upper_runtime(),
+            # "vote_average.gte": super().rating()
             }
 
     def api_call(self, parameters):
         # calls the api, if any of the categories are blank, the call will still be made, the results just won't be
         # filtered on the category
+        print(parameters)
         url = f"https://api.themoviedb.org/3/discover/movie"
         response = requests.get(url, params=parameters)
         self.result = response.json()
@@ -102,8 +111,8 @@ class CallingAPI(PrepForAPI):
 
 
 class SortingAPI(CallingAPI):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, age_rating, genres, lower_runtime):
+        super().__init__(age_rating, genres, lower_runtime)
         self.all_films = []
         self.count = 1
 
@@ -120,6 +129,3 @@ class SortingAPI(CallingAPI):
             # this is just to show what data is being selected and won't stay here, the relevant parts will need to be
             # displayed to the user but let me know if there's anything missing
             print(film)
-
-
-SortingAPI().sorting_data()

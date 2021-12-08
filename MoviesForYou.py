@@ -1,14 +1,15 @@
 from flask import Flask, render_template, url_for, flash, redirect
-#from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm, Input_User
+from api_calls import SortingAPI
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = 'caf68d5a247e7d1c5c7fb2e44b1c258c'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
-#db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
-#class Users:
+# class Users:
 #    id = db.Column(db.Integer, primary_key=True)
 #    username = db.Column(db.String(55), unique=True, nullalbe=False)
 #    email = db.Column(db.String(55), unique=True, nullalbe=False)
@@ -57,6 +58,7 @@ def home():
 @app.route("/what_to_watch", methods=['GET', 'POST'])
 def what_to_watch():
     form = Input_User()
+    SortingAPI(form.rating.data, form.genre.data, form.run_time.data).sorting_data()
     return render_template('what_to_watch.html', title='What To Watch', form=form)
 
 @app.route("/register", methods=['GET', 'POST'])
