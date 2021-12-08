@@ -60,8 +60,13 @@ def home():
 @app.route("/what_to_watch", methods=['GET', 'POST'])
 def what_to_watch():
     form = InputUser()
-    SortingAPI(form.rating.data, form.genre.data, form.run_time.data).sorting_data()
-    return render_template('what_to_watch.html', title='What To Watch', form=form)
+    data = SortingAPI(form.rating.data, form.genre.data, form.run_time.data)
+    data.sorting_data()
+    if not form.rating.data:
+        return render_template('what_to_watch.html', title='What To Watch', form=form)
+    else:
+        results = data.displaying_data()
+        return render_template('what_to_watch.html', title='What To Watch', form=form, results=results[0])
 
 
 @app.route("/register", methods=['GET', 'POST'])

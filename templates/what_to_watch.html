@@ -52,4 +52,11 @@
             </div>
         </form>
     </div>
+<div>
+    {% if form.rating.data %}
+    <h3>{{ results.Name }}</h3>
+    <p>{{ results.Description }}</p>
+    <img src="{{ results.Poster }}" alt="Movie Poster" width="200">
+    {% endif %}
+</div>
 {% endblock content %}

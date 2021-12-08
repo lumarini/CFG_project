@@ -101,7 +101,6 @@ class CallingAPI(PrepForAPI):
     def api_call(self, parameters):
         # calls the api, if any of the categories are blank, the call will still be made, the results just won't be
         # filtered on the category
-        print(parameters)
         url = f"https://api.themoviedb.org/3/discover/movie"
         response = requests.get(url, params=parameters)
         self.result = response.json()
@@ -123,7 +122,6 @@ class SortingAPI(CallingAPI):
                             "Description": each_film["overview"], "Poster": full_poster_path}
             self.all_films.append(current_film)
             self.count = self.count + 1
-        for film in self.all_films:
-            # this is just to show what data is being selected and won't stay here, the relevant parts will need to be
-            # displayed to the user but let me know if there's anything missing
-            print(film)
+
+    def displaying_data(self):
+        return self.all_films
