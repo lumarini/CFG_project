@@ -1,15 +1,28 @@
 {% extends "layout.html" %}
 {% block content %}
+<body></body>
     <h1>Movies For You - What's it all about?</h1>
+    <!-- <blockquote class="imgur-embed-pub" lang="en" data-id="a/Twm6Cmh" data-context="false" ><a href="//imgur.com/a/Twm6Cmh">filmsfor you</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>    <img src="https://imgur.com/a/Twm6Cmh" alt="Films For You"> -->
+    <img src="https://drive.google.com/file/d/1tpUibxs8Evsdh0qI3_RZ_TvsUJLlUH20/view?usp=sharing" width="200" height="267">
     <br>
-    <h3> Movies For You is a movie recommendation app that allows users to find movies they want to watch - whatever the occassion!</h3>
+    <!-- https://www.imgur.com/a/Twm6Cmh -->
+    <h2> Movies For You is a movie recommendation app that allows users to find movies they 
+        want to watch - whatever the occassion!</h2>
+
+    <h3></h3>
     <br>
-    <h4>Meet the Team!</h4>
-    <br>
+    <!-- <button type="button">Click here to start picking  a film! </button> -->
+    <form method="get" action="what_to_watch.html">
+        <input type="submit" value="Let's go pick a movie">
+    </form>
+<br>
+<h4>Brought to you by...</h4>
+<br> </br>
+</body>
 {% for post in posts %}
-        <h3>{{ post.name }}</h3>
-        <p>A bit about me is: {{ post.about_me }}</p>
-        <p>My favourite move is: {{ post.fav_movie }}</p>
+        <h5>{{ post.name }}</h5>
+        <p>About me: {{ post.about_me }}</p>
+        <!-- <p>My favourite movie is: {{ post.fav_movie }}</p> -->
     {% endfor %}
 {% endblock content %}
 

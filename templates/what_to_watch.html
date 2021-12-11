@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h3>Find the movie you want to watch down below!</h3>
+    <h3>Ready to find a movie to watch?</h3>
     <br>
             <div class="content-section">
                 <form method="POST" action="">
                     {{ form.hidden_tag() }}
                     <fieldset class="form-group mb-4">
-                     <legend class="border-bottom mb-4">What To Watch</legend>
+                     <legend class="border-bottom mb-4">Pick a Film</legend>
                         <div class="form-group mb-4">
                             {{ form.genre.label(class="form-control-label") }}
                             {% if form.genre.errors %}
