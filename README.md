@@ -8,3 +8,8 @@ https://www.wikihow.com/Use-Windows-Command-Prompt-to-Run-a-Python-File
 and here for MAC users:
 
 https://pythonbasics.org/execute-python-scripts/
+
+Packages you will need to run the MoviesForYou.pu
+
+- Flask
+- Flask-WTF
