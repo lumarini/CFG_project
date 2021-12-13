@@ -4,16 +4,16 @@ USE movie_recommendations;
 
 CREATE TABLE users (
 	user_id INT NOT NULL AUTO_INCREMENT,
-	username VARCHAR(55),
-    email VARCHAR(55),
-	password VARCHAR(20),
+	username VARCHAR(60),
+    email VARCHAR(60),
+	password BLOB,
     PRIMARY KEY (user_id)
 );
 
 CREATE TABLE movies (
     movie_id INT,
-	movie_name VARCHAR(55),
-    movie_detail VARCHAR(55),
+	movie_name VARCHAR(60),
+    movie_detail VARCHAR(60),
     PRIMARY KEY (movie_id)
 );
 
@@ -24,42 +24,28 @@ CREATE TABLE movies_watched (
     PRIMARY KEY (mw_id)
 );
 
-INSERT INTO users (username, email, password)
-VALUES 
-('lumarini', 'lumarini@ust', 'my_password'),
-('enrico', 'enrico@email', 'password'),
-('ninamarini', 'nina@email', 'passw'),
-('user', 'user@email', 'user_password');
+
+-- ############################################################
 
 
-INSERT INTO movies (movie_id, movie_name, movie_detail)
-VALUES
-(001, 'The Lion King', 'Comedy, Cartoon, Disney'),
-(002, 'Monsters, INC.', 'Comedy, Cartoon'),
-(003, 'Erin Brokovich', 'Drama'),
-(004, 'Bridget Jones Diary', 'Comedy'),
-(005, 'Thor', 'Action, Sci-Fi'),
-(006, 'Ratatouille', 'Comedy, Cartoon');
-
-INSERT INTO movies_watched (user_id, movie_id)
-VALUES 
-(1, 001),
-(1, 002),
-(2, 003),
-(2, 004),
-(3, 005),
-(3, 006);
+-- Run full code up to  the line above. The next line are only example queries I left as it is useful to fetch data as needed, 
+-- or to drop tables after they are too full of tests run on it.
 
 
-SELECT * from users;
+-- #############################################################
 
 
-SELECT u.user_id, u.username, m.movie_id, m.movie_name
-from users u, movies m, movies_watched mw
-where mw.user_id = u.user_id AND mw.movie_id = m.movie_id;
 
+-- SELECT * from users;
+
+-- SELECT u.user_id, u.username, m.movie_id, m.movie_name
+-- FROM users u, movies m, movies_watched mw
+-- WHERE mw.user_id = u.user_id AND mw.movie_id = m.movie_id 
 -- AND u.user_id = 1; 
 
+-- SELECT u.user_id, u.username, u.password
+-- FROM users as u
+-- WHERE username = 'lumarini';
 
 -- drop table users; 
 -- drop table movies; 
