@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, flash, redirect
 # from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm, InputUser
 from api_calls import SortingAPI
+from authenticate import Authenticate
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = 'caf68d5a247e7d1c5c7fb2e44b1c258c'
@@ -50,6 +51,11 @@ posts = [
 
 ]
 
+def return_true():
+    return True
+
+def return_false():
+    return False
 
 @app.route("/")
 @app.route("/home")
@@ -59,14 +65,56 @@ def home():
 
 @app.route("/what_to_watch", methods=['GET', 'POST'])
 def what_to_watch():
-    form = InputUser()
-    data = SortingAPI(form.rating.data, form.genre.data, form.run_time.data)
-    data.sorting_data()
-    if not form.rating.data:
+    try:
+        form = InputUser()
+        if not form.rating.data:
+            raise Exception
+
+    except:
         return render_template('what_to_watch.html', title='What To Watch', form=form)
+
     else:
-        results = data.displaying_data()
-        return render_template('what_to_watch.html', title='What To Watch', form=form, results=results[0])
+        auth = Authenticate(form.rating.data, form.genre.data, form.run_time.data)
+        genre_result = auth.genres()
+        age_rating_result = auth.age_ratings()
+        runtime_result = auth.lower_runtime()
+        genre_error = auth.genre_message()
+        age_rating_error = auth.age_rating_message()
+        runtime_error = auth.runtime_message()
+        results = [{"Name": "", "Descriptions": "",
+                    "Poster": "https://cdn.schoolstickers.com/products/en/819/10MM_SMILE-02.png"}]
+        if not genre_result and not age_rating_result and not runtime_result:
+            return render_template('what_to_watch.html', title='What To Watch', form=form, genre_error=genre_error,
+                                   age_rating_error=age_rating_error, runtime_error=runtime_error, results=results[0])
+        elif not genre_result and not age_rating_result:
+            return render_template('what_to_watch.html', title='What To Watch', form=form, genre_error=genre_error,
+                                   age_rating_error=age_rating_error, results=results[0])
+        elif not age_rating_result and not runtime_result:
+            return render_template('what_to_watch.html', title='What To Watch', form=form,
+                                   age_rating_error=age_rating_error, runtime_error=runtime_error, results=results[0])
+        elif not genre_result and not runtime_result:
+            return render_template('what_to_watch.html', title='What To Watch', form=form, genre_error=genre_error,
+                                   runtime_error=runtime_error, results=results[0])
+        elif not genre_result:
+            return render_template('what_to_watch.html', title='What To Watch', form=form, genre_error=genre_error,
+                                   results=results[0])
+        elif not age_rating_result:
+            return render_template('what_to_watch.html', title='What To Watch', form=form,
+                                   age_rating_error=age_rating_error, results=results[0])
+        elif not runtime_result:
+            return render_template('what_to_watch.html', title='What To Watch', form=form, runtime_error=runtime_error,
+                                   results=results[0])
+        else:
+            result = SortingAPI(form.rating.data, form.genre.data, form.run_time.data)
+            result.sorting_data()
+            results = result.displaying_data()
+            if form.rating.data and genre_result and age_rating_result and runtime_result:
+                print(form.rating.data)
+                print(results)
+                print(genre_result)
+                print(runtime_result)
+                print(age_rating_result)
+                return render_template('what_to_watch.html', title='What To Watch', form=form, results=results[0])
 
 
 @app.route("/register", methods=['GET', 'POST'])

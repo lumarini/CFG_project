@@ -19,6 +19,9 @@
                     {% else %}
                         {{ form.genre(class="form-control form-control-lg") }}
                     {% endif %}
+                    {% if not genre_result %}
+                        <p>{{ genre_error }}</p>
+                    {% endif %}
                 </div>
                 <div class="form-group mb-4">
                     {{ form.rating.label(class="form-control-label") }}
@@ -31,6 +34,9 @@
                         </div>
                     {% else %}
                         {{ form.rating(class="form-control form-control-lg") }}
+                    {% endif %}
+                    {% if not age_rating_result %}
+                        <p>{{ age_rating_error }}</p>
                     {% endif %}
                 </div>
                 <div class="form-group mb-4">
@@ -45,6 +51,9 @@
                     {% else %}
                         {{ form.run_time(class="form-control form-control-lg") }}
                     {% endif %}
+                    {% if not runtime_result %}
+                        <p>{{ runtime_error }}</p>
+                    {% endif %}
                 </div>
             </fieldset>
             <div class="form-group">
@@ -53,10 +62,8 @@
         </form>
     </div>
 <div>
-    {% if form.rating.data %}
     <h3>{{ results.Name }}</h3>
     <p>{{ results.Description }}</p>
     <img src="{{ results.Poster }}" alt="Movie Poster" width="200">
-    {% endif %}
 </div>
 {% endblock content %}

@@ -13,6 +13,7 @@ class PrepForAPI:  # sorts the data into the correct format to make the API call
         # # from 0 to 10
         # self.chosen_rating = rating  # needs replacing with input from front end
         self.age_rating_list = []
+        self.upper_age_ratings = []
         self.all_age_rating = ""
         self.genres_list = []
         self.capitalize_genres = []
@@ -22,7 +23,9 @@ class PrepForAPI:  # sorts the data into the correct format to make the API call
     def age_ratings(self):  # Joins all the selected age ratings together in the correct format
         self.chosen_age_ratings = str(self.chosen_age_ratings)
         self.age_rating_list = self.chosen_age_ratings.split(", ")
-        self.all_age_rating = "|".join(self.age_rating_list)
+        for chosen_age_rating in self.age_rating_list:
+            self.upper_age_ratings.append(chosen_age_rating.upper())
+        self.all_age_rating = "|".join(self.upper_age_ratings)
         return self.all_age_rating
 
     def genres(self):  # Changes the genres to the corresponding number and joins them together in the correct format
@@ -103,6 +106,7 @@ class CallingAPI(PrepForAPI):
         # filtered on the category
         url = f"https://api.themoviedb.org/3/discover/movie"
         response = requests.get(url, params=parameters)
+        response.raise_for_status()
         self.result = response.json()
         self.films = self.result["results"]
 
