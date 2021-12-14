@@ -11,5 +11,13 @@ https://pythonbasics.org/execute-python-scripts/
 
 Packages you will need to run the MoviesForYou.pu
 
-- Flask
+Front-end
+- Flask 
 - Flask-WTF
+
+API
+-requests
+
+Database
+-mysql-connector
+-mysql-connector-python
