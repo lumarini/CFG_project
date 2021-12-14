@@ -16,8 +16,8 @@ Front-end
 - Flask-WTF
 
 API
--requests
+- requests
 
 Database
--mysql-connector
--mysql-connector-python
+- mysql-connector
+- mysql-connector-python
