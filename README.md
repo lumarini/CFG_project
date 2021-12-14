@@ -1,5 +1,5 @@
 # CFG_project
-CFG project - Group 4
+CFG project - Group 4 - Movies For You
 
 Saamiya - To view the app, here is a simple tutorial on how to run a python file in the command prompt on Windows:
 
