@@ -109,6 +109,7 @@ class CallingAPI(PrepForAPI):
         response.raise_for_status()
         self.result = response.json()
         self.films = self.result["results"]
+        return response.status_code
 
 
 class SortingAPI(CallingAPI):
