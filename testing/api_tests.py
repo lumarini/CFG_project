@@ -77,14 +77,21 @@ class TestSortingAPI(unittest.TestCase):
 		genre = "Horror"
 		runtime = 100
 
-		expected = {'Description': 'A deep sea submersible pilot revisits his past fears in the Mariana Trench, and '
+		expected = [{'Description': 'A deep sea submersible pilot revisits his past fears in the Mariana Trench, and '
 									'accidentally unleashes the seventy foot ancestor of the Great White Shark '
 									'believed to be extinct.',
 					'ID': 345940,
 					'Name': 'The Meg',
 					'Poster': 'https://image.tmdb.org/t/p/original//xqECHNvzbDL5I3iiOVUkVPJMSbc.jpg',
-					'Recommendation Option': 1}
+					'Recommendation Option': 1}]
+
 		sort = SortingAPI(age_rating, genre, runtime)
-		sort.sorting_data()
-		result = sort.displaying_data()[0]
+		sort.films = [{'adult': False, 'backdrop_path': '/rH79sB6Nkx4cMW3JzsUy7wK0rhX.jpg', 'genre_ids': [28, 878, 27],
+						'id': 345940, 'original_language': 'en', 'original_title': 'The Meg', 'overview': 'A deep sea '
+						'submersible pilot revisits his past fears in the Mariana Trench, and accidentally unleashes the '
+						'seventy foot ancestor of the Great White Shark believed to be extinct.', 'popularity': 72.476,
+						'poster_path': '/xqECHNvzbDL5I3iiOVUkVPJMSbc.jpg', 'release_date': '2018-08-09', 'title':
+						'The Meg', 'video': False, 'vote_average': 6.2, 'vote_count': 5577}]
+
+		result = sort.sorting_data()
 		self.assertEqual(expected, result)

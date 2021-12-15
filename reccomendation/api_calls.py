@@ -119,7 +119,6 @@ class SortingAPI(CallingAPI):
         self.count = 1
 
     def sorting_data(self):
-        super().api_call(self.chosen_parameters)  # makes the call to the API so the data can then be sorted
         for each_film in self.films:  # gets the relevant data for each film and puts it into a dictionary
             part_poster_path = each_film["poster_path"]
             full_poster_path = f"https://image.tmdb.org/t/p/original/{part_poster_path}"
@@ -127,6 +126,14 @@ class SortingAPI(CallingAPI):
                             "Description": each_film["overview"], "Poster": full_poster_path}
             self.all_films.append(current_film)
             self.count = self.count + 1
+        return self.all_films
+
+
+class DisplayingAPI(SortingAPI):
+    def __init__(self, age_rating, genres, lower_runtime):
+        super().__init__(age_rating, genres, lower_runtime)
 
     def displaying_data(self):
+        super().api_call(self.chosen_parameters)  # makes the call to the API so the data can then be sorted
+        super().sorting_data()
         return self.all_films
