@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, flash, redirect
+from flask import Flask, render_template, url_for, flash, redirect, flash
 # from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm, InputUser
 from api_calls import SortingAPI
@@ -60,13 +60,27 @@ def home():
 @app.route("/what_to_watch", methods=['GET', 'POST'])
 def what_to_watch():
     form = InputUser()
-    data = SortingAPI(form.rating.data, form.genre.data, form.run_time.data)
+    data = SortingAPI(form.rating.data, form.genre.data, form.run_time.data, form.number_of_results, form.keywords)
     data.sorting_data()
-    if not form.rating.data:
-        return render_template('what_to_watch.html', title='What To Watch', form=form)
-    else:
-        results = data.displaying_data()
-        return render_template('what_to_watch.html', title='What To Watch', form=form, results=results[0])
+
+    results = data.displaying_data()
+    try:
+        if int(form.number_of_results.data) == 3:
+            return render_template('what_to_watch_3_results.html', title='What To Watch', form=form,
+                                   results=[results[0], results[1], results[2]])
+        elif int(form.number_of_results.data) == 5:
+            return render_template('what_to_watch_5_results.html', title='What To Watch', form=form,
+                                   results=[results[0], results[1], results[2], results[3], results[4]])
+        else:
+            return render_template('what_to_watch_10_results.html', title='What To Watch', form=form,
+                                   results=[results[0], results[1], results[2], results[3], results[4],
+                                            results[5], results[6], results[7], results[8], results[9]])
+    except:
+        try:
+            return render_template('what_to_watch.html', title='What To Watch', form=form, results=results[0])
+        except:
+            flash(u'No films could be found with that criteria.', 'error')
+            return redirect(url_for('what_to_watch'))
 
 
 @app.route("/register", methods=['GET', 'POST'])
