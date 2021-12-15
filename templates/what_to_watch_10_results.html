@@ -109,11 +109,116 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
-        <p> </p>
-        {% if not result_list %}
-                        {{ no_result_message }}
-        {% endif %}
-        <p> </p>
     </div>
+<div>
+    <p> </p>
+        {% if not keywords %}
+            {{ no_keyword_message }}
+        {% endif %}
+    <p> </p>
+    <p> </p>
+        {{ different_result_message }}
+    <p> </p>
+</div>
+<table>
+    <tr>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_list[0].Name }}</h3>
+            <p>{{ result_list[0].Description }}</p>
+            <img src="{{ result_list[0].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_1">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_list[1].Name }}</h3>
+            <p>{{ result_list[1].Description }}</p>
+            <img src="{{ result_list[1].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_2">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_lists[2].Name }}</h3>
+            <p>{{ result_list[2].Description }}</p>
+            <img src="{{ result_list[2].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_3">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_list[3].Name }}</h3>
+            <p>{{ result_list[3].Description }}</p>
+            <img src="{{ result_list[3].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_4">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_list[4].Name }}</h3>
+            <p>{{ result_list[4].Description }}</p>
+            <img src="{{ result_list[4].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_5">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_list[5].Name }}</h3>
+            <p>{{ result_list[5].Description }}</p>
+            <img src="{{ result_list[5].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_6">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_list[6].Name }}</h3>
+            <p>{{ result_list[6].Description }}</p>
+            <img src="{{ result_list[6].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_7">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_list[7].Name }}</h3>
+            <p>{{ result_list[7].Description }}</p>
+            <img src="{{ result_list[7].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_8">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ result_list[8].Name }}</h3>
+            <p>{{ result_list[8].Description }}</p>
+            <img src="{{ result_list[8].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_9">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top; padding: 20px;">
+            <h3>{{ results[9].Name }}</h3>
+            <p>{{ results[9].Description }}</p>
+            <img src="{{ results[9].Poster }}" alt="Movie Poster" width="200">
+            {{ add_to_watchlist.hidden_tag() }}
+            <form method="POST" action="/adding_to_watchlist_button_10">
+                {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+            </form>
+        </td>
+    </tr>
+</table>
 
 {% endblock content %}
