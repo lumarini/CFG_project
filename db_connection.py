@@ -1,15 +1,13 @@
-###Imports:
+# Imports:
 import mysql.connector
 from db_config import HOST, USER, PASSWORD, KEY
 
 
-
-###Constants:
+# Constants:
 DATABASE = 'movie_recommendations'
 TABLE_USERS = "users"
 TABLE_MOVIES = "movies"
 TABLE_MOVIES_WATCHED = "movies_watched"
-
 
 
 def db_connection(db_name):
@@ -69,18 +67,16 @@ def read_db(sql_query, db_name=DATABASE, fetchall=True):
     return result
 
 
+# Functionalities to DB:
 
+#  1 --- REGISTER USER
 
-###Functionalities to DB:
-
-###  1 --- REGISTER USER
-
-def register_new_user(user, email, password):
+def register_new_user(user, password):
 
     """Function to register new user onto DB"""
 
-    INSERT_USER = f"""INSERT INTO users (username, email, password)
-        VALUES ('{user}', '{email}', AES_ENCRYPT('{password}','{KEY}'));"""
+    INSERT_USER = f"""INSERT INTO users (username, password)
+        VALUES ('{user}', AES_ENCRYPT('{password}','{KEY}'));"""
     try:
         query_db(INSERT_USER)
     except Exception:
@@ -90,7 +86,7 @@ def register_new_user(user, email, password):
     return user
 
 
-###  2 --- LOGIN
+#  2 --- LOGIN
 def authenticate_user(user, password_inserted):
 
     """Function to authenticate user that was already registered onto DB"""
@@ -111,8 +107,44 @@ def authenticate_user(user, password_inserted):
             return False
 
 
+def find_id(user):
 
-###  3 --- FETCH ALL 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
+    """Function to find user_id"""
+
+    query = f"""SELECT user_id
+                FROM users
+                WHERE username = '{user}';"""
+    try:
+        result = read_db(query, fetchall=False)
+    except Exception:
+        raise ConnectionRefusedError("User not found on DB.")
+    else:
+        return result[0]
+
+
+def lookup_username(username):
+
+    """Function to see if username exists"""
+    query = f"""SELECT user_id
+                FROM users
+                WHERE username = '{username}';"""
+    try:
+        result = read_db(query, fetchall=False)
+    except Exception:
+        raise ConnectionRefusedError("User not found on DB.")
+    else:
+        if not result:
+            return True
+        else:
+            return False
+        # return result[0]
+
+
+lookup_username("hello")
+#  3 --- FETCH ALL 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
+
+
+
 def get_movies_watched(current_user):
 
     """Function to fetch movies already registered by user as "already watched", so
@@ -122,7 +154,7 @@ def get_movies_watched(current_user):
 
     list_of_movies_watched = []
     movie_ids = []
-    query = f"""SELECT u.user_id, u.username, m.movie_id, m.movie_name
+    query = f"""SELECT m.movie_id, m.movie_name, m.movie_detail, m.movie_poster_path
                 from users u, movies m, movies_watched mw
                 where mw.user_id = u.user_id AND mw.movie_id = m.movie_id 
                 AND u.user_id = {current_user};"""
@@ -131,40 +163,45 @@ def get_movies_watched(current_user):
     except Exception:
         raise ConnectionRefusedError("Not found movies already watched for this user.")
     else:
-        for line in result:
-             list_of_movies_watched.append(line)
-             movie_ids.append(line[2])
-        return list_of_movies_watched
+        if not result:
+            return False
+        else:
+            all_films = []
+            for line in result:
+                current_film = {"Name": line[1],
+                                "ID": line[0],
+                                "Description": line[2],
+                                "Poster": line[3]}
+                all_films.append(current_film)
+            return all_films
 
 
+# print(get_movies_watched(1))
+#  4 --- ADD NEW MOVIE ON 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
 
-###  4 --- ADD NEW MOVIE ON 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
-
-def insert_movie_watched(current_user_id, movie_id, movie_name, movie_detail):
+def insert_movie_watched(current_user_id, movie_id, movie_name, movie_detail, movie_poster_path):
 
     """Query A - inserts movie to the list of movies (if not already there -- insert ignore / upsert).
        Query B - inserts an entry stating user id and movie id (join for tables users and movies)
        creating a many-to-many relationship. Each line is a different movie marked as already watched
        by a specific user. It does not duplicate a record already on the database (insert ignore / upsert)"""
 
-    query_a = f"""INSERT IGNORE INTO movies (movie_id, movie_name, movie_detail)
-                VALUES ({movie_id}, '{movie_name}', '{movie_detail}');"""
+    query_a = f"""INSERT IGNORE INTO movies (movie_id, movie_name, movie_detail, movie_poster_path)
+                VALUES ({movie_id}, '{movie_name}', '{movie_detail}', '{movie_poster_path}');"""
     try:
-        query_db(query_a)   ###Insert movie into movies table if not already there
+        query_db(query_a)   # Insert movie into movies table if not already there
     except Exception:
         raise ConnectionRefusedError("Could not add this movie to list of movies.")
 
     query_b = f"""INSERT IGNORE INTO movies_watched (user_id, movie_id)
                 VALUES ({current_user_id}, {movie_id});"""
     try:
-        query_db(query_b)   ###add movie to attached to user's list of watched movies
+        query_db(query_b)   # add movie to attached to user's list of watched movies
     except Exception:
         raise ConnectionRefusedError("Could not add this movie to list of movies already watched")
     else:
         print(f" Movie {movie_name} successfully added as already watched by user {current_user_id}.")
         return movie_id
-
-
 
 
 """STEPS for implementing DB connection: """
@@ -176,24 +213,23 @@ and USER = "root", and what changes is the password;
 
 3- After creating the DB, try running the line of code below to create the user Nina:
 """
-
-#register_new_user('Nina', 'nina@email', 'password')
+# register_new_user('Nina', 'nina@email', 'password')
 
 """ 4- After that, please try to run the code below to authenticate the user Nina, given the username and password,
 which should return true"""
 
-#print(authenticate_user('Nina', 'password'))
+# print(authenticate_user('Nina', 'password'))
 
 
 """
 5- After creating the user, let's try to add a movie that was already watched by this user Nina
 """
-#insert_movie_watched(1, 1, "The Lion King", "Comedy, cartoon")
+# insert_movie_watched(1, 1, "The Lion King", "Comedy, cartoon")
 
 """
 5- Lastly, let's fetch the movies already watched by user by user_id:
 """
-#print(get_movies_watched(1))
+# print(get_movies_watched(1))
 
 """
 Comments:

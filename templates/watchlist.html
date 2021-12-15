@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+<p> </p>
+{{ logged_in_status }}
+<p> </p>
+    <h3>Your Watchlist</h3>
+
+{% for film in films %}
+<p> </p>
+<h5>{{ film.Name }}</h5>
+<p>{{ film.Description }}</p>
+<img src="{{ film.Poster }}" alt="Movie Poster" width="200">
+{% endfor %}
+{% endblock content %}

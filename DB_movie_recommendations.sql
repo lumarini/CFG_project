@@ -5,7 +5,6 @@ USE movie_recommendations;
 CREATE TABLE users (
 	user_id INT NOT NULL AUTO_INCREMENT,
 	username VARCHAR(60),
-    email VARCHAR(60),
 	password BLOB,
     PRIMARY KEY (user_id)
 );
@@ -13,7 +12,8 @@ CREATE TABLE users (
 CREATE TABLE movies (
     movie_id INT,
 	movie_name VARCHAR(60),
-    movie_detail VARCHAR(60),
+    movie_detail VARCHAR(10000),
+    movie_poster_path VARCHAR(1000),
     PRIMARY KEY (movie_id)
 );
 

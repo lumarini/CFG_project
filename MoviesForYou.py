@@ -1,8 +1,10 @@
-from flask import Flask, render_template, url_for, flash, redirect
+from flask import Flask, render_template, url_for, flash, redirect, request
 # from flask_sqlalchemy import SQLAlchemy
-from forms import RegistrationForm, LoginForm, InputUser
+from forms import RegistrationForm, LoginForm, InputUser, AddToWatchlist
 from api_calls import SortingAPI
 from authenticate import Authenticate
+from db_connection import register_new_user, authenticate_user, get_movies_watched, insert_movie_watched, find_id, \
+    lookup_username
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = 'caf68d5a247e7d1c5c7fb2e44b1c258c'
@@ -60,18 +62,28 @@ def return_false():
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', posts=posts)
+    global login_success, current_username
+    if login_success:
+        logged_in_status = f"Logged in as {current_username}"
+    else:
+        logged_in_status = "Not logged in"
+    return render_template('home.html', posts=posts, logged_in_status=logged_in_status)
 
 
 @app.route("/what_to_watch", methods=['GET', 'POST'])
 def what_to_watch():
     try:
+        global login_success, current_username
+        if login_success:
+            logged_in_status = f"Logged in as {current_username}"
+        else:
+            logged_in_status = "Not logged in"
         form = InputUser()
         if not form.rating.data:
             raise Exception
 
     except:
-        return render_template('what_to_watch.html', title='What To Watch', form=form)
+        return render_template('what_to_watch.html', title='What To Watch', form=form, logged_in_status=logged_in_status)
 
     else:
         auth = Authenticate(form.rating.data, form.genre.data, form.run_time.data)
@@ -81,56 +93,132 @@ def what_to_watch():
         genre_error = auth.genre_message()
         age_rating_error = auth.age_rating_message()
         runtime_error = auth.runtime_message()
-        results = [{"Name": "", "Descriptions": "",
-                    "Poster": "https://cdn.schoolstickers.com/products/en/819/10MM_SMILE-02.png"}]
+
+        result = SortingAPI(form.rating.data, form.genre.data, form.run_time.data)
+        result.sorting_data()
+        results = result.displaying_data()
+
+        add_to_watchlist = AddToWatchlist()
+
+        global current_film_id, current_film_name, current_film_detail, current_film_poster
+        current_film_id = results[0]["ID"]
+        current_film_name = results[0]["Name"]
+        current_film_detail = results[0]["Description"]
+        current_film_poster = results[0]["Poster"]
+
         if not genre_result and not age_rating_result and not runtime_result:
             return render_template('what_to_watch.html', title='What To Watch', form=form, genre_error=genre_error,
-                                   age_rating_error=age_rating_error, runtime_error=runtime_error, results=results[0])
+                                   age_rating_error=age_rating_error, runtime_error=runtime_error, results=results[0],
+                                   add_to_watchlist=add_to_watchlist, logged_in_status=logged_in_status)
         elif not genre_result and not age_rating_result:
             return render_template('what_to_watch.html', title='What To Watch', form=form, genre_error=genre_error,
-                                   age_rating_error=age_rating_error, results=results[0])
+                                   age_rating_error=age_rating_error, results=results[0],
+                                   add_to_watchlist=add_to_watchlist, logged_in_status=logged_in_status)
         elif not age_rating_result and not runtime_result:
             return render_template('what_to_watch.html', title='What To Watch', form=form,
-                                   age_rating_error=age_rating_error, runtime_error=runtime_error, results=results[0])
+                                   age_rating_error=age_rating_error, runtime_error=runtime_error, results=results[0],
+                                   add_to_watchlist=add_to_watchlist, logged_in_status=logged_in_status)
         elif not genre_result and not runtime_result:
             return render_template('what_to_watch.html', title='What To Watch', form=form, genre_error=genre_error,
-                                   runtime_error=runtime_error, results=results[0])
+                                   runtime_error=runtime_error, results=results[0], add_to_watchlist=add_to_watchlist,
+                                   logged_in_status=logged_in_status)
         elif not genre_result:
             return render_template('what_to_watch.html', title='What To Watch', form=form, genre_error=genre_error,
-                                   results=results[0])
+                                   results=results[0], add_to_watchlist=add_to_watchlist,
+                                   logged_in_status=logged_in_status)
         elif not age_rating_result:
             return render_template('what_to_watch.html', title='What To Watch', form=form,
-                                   age_rating_error=age_rating_error, results=results[0])
+                                   age_rating_error=age_rating_error, results=results[0],
+                                   add_to_watchlist=add_to_watchlist, logged_in_status=logged_in_status)
         elif not runtime_result:
             return render_template('what_to_watch.html', title='What To Watch', form=form, runtime_error=runtime_error,
-                                   results=results[0])
+                                   results=results[0], add_to_watchlist=add_to_watchlist,
+                                   logged_in_status=logged_in_status)
         else:
-            result = SortingAPI(form.rating.data, form.genre.data, form.run_time.data)
-            result.sorting_data()
-            results = result.displaying_data()
-            if form.rating.data and genre_result and age_rating_result and runtime_result:
-                print(form.rating.data)
-                print(results)
-                print(genre_result)
-                print(runtime_result)
-                print(age_rating_result)
-                return render_template('what_to_watch.html', title='What To Watch', form=form, results=results[0])
+            return render_template('what_to_watch.html', title='What To Watch', form=form, results=results[0],
+                                   add_to_watchlist=add_to_watchlist, logged_in_status=logged_in_status)
+
+
+@app.route("/adding_to_watchlist", methods=['GET', 'POST'])
+def adding_to_watchlist():
+    if login_success:
+        global current_film_id, current_film_name, user_id, current_film_detail, current_film_poster
+        insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
+        flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
+        return redirect(url_for('what_to_watch'))
+    else:
+        flash(f'Login to add films to your watchlist', 'warning')
+        return redirect(url_for('login'))
+
+
+@app.route("/watchlist")
+def watchlist():
+    global login_success, current_username, user_id
+    if login_success:
+        logged_in_status = f"Logged in as {current_username}"
+        films = get_movies_watched(user_id)
+        if not films:
+            flash('Your watchlist is currently empty, add films here', 'warning')
+            return redirect(url_for('what_to_watch'))
+        else:
+            return render_template('watchlist.html', title='Watchlist', films=films, logged_in_status=logged_in_status)
+
+    else:
+        flash(f'Login to view your watchlist', 'warning')
+        return redirect(url_for('login'))
 
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    global login_success, current_username
+    if login_success:
+        logged_in_status = f"Logged in as {current_username}"
+    else:
+        logged_in_status = "Not logged in"
     form = RegistrationForm()
-    if form.validate_on_submit():
-        flash(f'Account has successfully been created for {form.username.data}!', 'success')
-        return redirect(url_for('home'))
-    return render_template('register.html', title='Register', form=form)
+    username_doesnt_exist = lookup_username(form.username.data)
+    if not username_doesnt_exist:
+        message = f"{form.username.data} is already taken, try another username"
+        return render_template('register.html', title='Register', form=form, logged_in_status=logged_in_status,
+                               message=message)
+    else:
+        if form.validate_on_submit():
+            register_new_user(form.username.data, form.password.data)
+            flash(f'Account has successfully been created for {form.username.data}!', 'success')
+            return redirect(url_for('home'))
+        return render_template('register.html', title='Register', form=form, logged_in_status=logged_in_status)
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
+    global login_success, current_username, user_id
+    if login_success:
+        logged_in_status = f"Logged in as {current_username}"
+    else:
+        logged_in_status = "Not logged in"
     form = LoginForm()
-    return render_template('login.html', title='Login', form=form)
+
+    if form.validate_on_submit():
+        info = authenticate_user(form.username.data, form.password.data)
+        if info:
+            login_success = True
+            user_id = find_id(form.username.data)
+            current_username = form.username.data
+            flash(f'Account has successfully been logged in for {form.username.data}!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash(f'Wrong info')
+    return render_template('login.html', title='Login', form=form, logged_in_status=logged_in_status)
+
+@app.route("/logout")
+def logout():
+    global login_success, current_username
+    login_success = False
+    flash(f'You have been logged out from {current_username}', 'success')
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
+    global login_success
+    login_success = False
     app.run(debug=True)

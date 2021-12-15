@@ -23,3 +23,7 @@ class InputUser(FlaskForm):
     run_time = StringField("How long is the film?", validators=[DataRequired()])
     rating = StringField("What age rating do you prefer?", validators=[DataRequired()])
     submit = SubmitField("Enter your choices!")
+
+
+class AddToWatchlist(FlaskForm):
+    submit = SubmitField("Add to Watchlist")

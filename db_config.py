@@ -1,4 +1,4 @@
 HOST = "localhost"
 USER = "root"
-PASSWORD = "       "
+PASSWORD = "Caramel!01"
 KEY = 'thisisaverylongstringtobeusedasencryptionkey'

@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
+<p> </p>
+{{ logged_in_status }}
+<p> </p>
     <h3>Find the movie you want to watch down below!</h3>
     <br>
     <div class="content-section">
@@ -62,8 +65,19 @@
         </form>
     </div>
 <div>
-    <h3>{{ results.Name }}</h3>
-    <p>{{ results.Description }}</p>
-    <img src="{{ results.Poster }}" alt="Movie Poster" width="200">
+    {% if form.rating.data %}
+        <h3>{{ results.Name }}</h3>
+        <p>{{ results.Description }}</p>
+        <img src="{{ results.Poster }}" alt="Movie Poster" width="200">
+
+    {{ add_to_watchlist.hidden_tag() }}
+    <form method="POST" action="/adding_to_watchlist">
+    {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
+</form>
+
+    {% endif %}
+
+
 </div>
+
 {% endblock content %}
