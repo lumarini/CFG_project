@@ -1,12 +1,14 @@
 import requests  # <------ import requests
 
+
 class PrepForAPI:  # sorts the data into the correct format to make the API call
-    def __init__(self, age_rating, genres, lower_runtime, number_of_results, keywords):
+    def __init__(self, age_rating, genres, lower_runtime, upper_runtime, keywords):
         # options = 15, R18, U, PG, 12A, 12, 18
         self.chosen_age_ratings = age_rating
         self.chosen_genres = genres
         self.chosen_keywords = keywords
         self.chosen_lower_runtime = lower_runtime
+        self.chosen_upper_runtime = upper_runtime
 
         self.age_rating_list = []
         self.upper_age_ratings = []
@@ -26,7 +28,6 @@ class PrepForAPI:  # sorts the data into the correct format to make the API call
             self.upper_age_ratings.append(chosen_age_rating.upper())
         self.all_age_rating = "|".join(self.upper_age_ratings)
         return self.all_age_rating
-
 
     def genres(self):  # Changes the genres to the corresponding number and joins them together in the correct format
         self.chosen_genres = str(self.chosen_genres)
@@ -76,12 +77,20 @@ class PrepForAPI:  # sorts the data into the correct format to make the API call
         return self.all_genres
 
     def lower_runtime(self):  # Returns the chosen lower runtime
-        return self.chosen_lower_runtime
+        if not self.chosen_lower_runtime:
+            self.chosen_lower_runtime = ""
+        print(f" the lower runtime: {self.chosen_lower_runtime}")
+        return str(self.chosen_lower_runtime)
 
+    def upper_runtime(self):  # Returns the chosen lower runtime
+        if not self.chosen_upper_runtime:
+            self.chosen_upper_runtime = ""
+        print(f" the upper runtime: {self.chosen_upper_runtime}")
+        return str(self.chosen_upper_runtime)
 
     def keywords(self):
-        if self.chosen_keywords.data is not None and self.chosen_keywords.data != "":
-            self.keywords_list = self.chosen_keywords.data.split(" ")
+        if self.chosen_keywords is not None and self.chosen_keywords != "":
+            self.keywords_list = self.chosen_keywords.split(", ")
 
             # Search up the keyword IDs
             for kw in self.keywords_list:
@@ -105,27 +114,21 @@ class PrepForAPI:  # sorts the data into the correct format to make the API call
 
 
 class CallingAPI(PrepForAPI):
-    def __init__(self, age_rating, genres, lower_runtime, number_of_results, keywords):
-        super().__init__(age_rating, genres, lower_runtime, number_of_results, keywords)
+    def __init__(self, age_rating, genres, lower_runtime, upper_runtime, keywords):
+        super().__init__(age_rating, genres, lower_runtime, upper_runtime, keywords)
         self.result = []
         self.films = []
 
-        self.chosen_parameters = {
-            "api_key": "43c96095652d8dd6ac3f404242b593fe",
-            "sort_by": "popularity.desc",
-            "certification_country": "GB",
-            "certification.gte": super().age_ratings(),
-            "page": 10,
-            "with_genres": super().genres(),
-            "with_keywords": super().keywords,
-            "with_runtime.gte": super().lower_runtime(),
-            }
 
-    def api_call(self, parameters):
+    def api_call(self):
         # calls the api, if any of the categories are blank, the call will still be made, the results just won't be
         # filtered on the category
-        url = f"https://api.themoviedb.org/3/discover/movie"
-        response = requests.get(url, params=parameters)
+        url = f"https://api.themoviedb.org/3/discover/movie?api_key=43c96095652d8dd6ac3f404242b593fe" \
+              f"&sort_by=popularity.desc&certification_country=GB&certification={super().age_ratings()}" \
+              f"&with_genres={super().genres()}&with_runtime.gte={super().lower_runtime()}" \
+              f"&with_runtime.lte={super().upper_runtime()}&with_keywords={super().keywords()}"
+        print(url)
+        response = requests.get(url)
         response.raise_for_status()
         self.result = response.json()
         self.films = self.result["results"]
@@ -133,8 +136,8 @@ class CallingAPI(PrepForAPI):
 
 
 class SortingAPI(CallingAPI):
-    def __init__(self, age_rating, genres, lower_runtime, number_of_results, keywords):
-        super().__init__(age_rating, genres, lower_runtime, number_of_results, keywords)
+    def __init__(self, age_rating, genres, lower_runtime, upper_runtime, keywords):
+        super().__init__(age_rating, genres, lower_runtime, upper_runtime, keywords)
         self.all_films = []
         self.count = 1
 
@@ -150,10 +153,10 @@ class SortingAPI(CallingAPI):
 
 
 class DisplayingAPI(SortingAPI):
-    def __init__(self, age_rating, genres, lower_runtime):
-        super().__init__(age_rating, genres, lower_runtime)
+    def __init__(self, age_rating, genres, lower_runtime, upper_runtime, keywords):
+        super().__init__(age_rating, genres, lower_runtime, upper_runtime, keywords)
 
     def displaying_data(self):
-        super().api_call(self.chosen_parameters)  # makes the call to the API so the data can then be sorted
+        super().api_call()  # makes the call to the API so the data can then be sorted
         super().sorting_data()
         return self.all_films

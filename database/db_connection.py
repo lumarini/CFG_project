@@ -210,7 +210,7 @@ def insert_movie_watched(current_user_id, movie_id, movie_name, movie_detail, mo
        by a specific user. It does not duplicate a record already on the database (insert ignore / upsert)"""
 
     query_a = f"""INSERT IGNORE INTO movies (movie_id, movie_name, movie_detail, movie_poster_path)
-                VALUES ({movie_id}, '{movie_name}', '{movie_detail}', '{movie_poster_path}');"""
+                VALUES ("{movie_id}", "{movie_name}", "{movie_detail}", "{movie_poster_path}");"""
     try:
         query_db(query_a)   # Insert movie into movies table if not already there
     except Exception:
