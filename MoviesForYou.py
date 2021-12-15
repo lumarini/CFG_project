@@ -207,7 +207,7 @@ def login():
             flash(f'Account has successfully been logged in for {form.username.data}!', 'success')
             return redirect(url_for('home'))
         else:
-            flash(f'Wrong info')
+            flash(f"A user with that information doesn't exist, please try again", "warning")
     return render_template('login.html', title='Login', form=form, logged_in_status=logged_in_status)
 
 @app.route("/logout")

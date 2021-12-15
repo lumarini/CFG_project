@@ -97,8 +97,10 @@ def authenticate_user(user, password_inserted):
     try:
         result = read_db(query, fetchall=False)
     except Exception:
-        raise ConnectionRefusedError("User not found on DB.")
+        return False
     else:
+        if not result:
+            return False
         password_decrypted = result[0].decode()
         if password_inserted == password_decrypted:
             return True
