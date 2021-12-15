@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, flash, redirect, request
 from forms import RegistrationForm, LoginForm, InputUser, AddToWatchlist
 from api_calls import SortingAPI
 from authenticate import Authenticate
-from db_connection import register_new_user, authenticate_user, get_movies_watched, insert_movie_watched, find_id, \
+from db_connection_take_2 import register_new_user, authenticate_user, get_movies_watched, insert_movie_watched, find_id, \
     lookup_username
 app = Flask(__name__)
 
