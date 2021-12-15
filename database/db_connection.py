@@ -1,13 +1,13 @@
 # Imports:
-import mysql.connector
-from db_config import HOST, USER, PASSWORD, KEY
+import mysql.connector  # <------ import mysql-connector-python
+from database.db_config import HOST, USER, PASSWORD, KEY
 
 
 # Constants:
 DATABASE = 'movie_recommendations'
 TABLE_USERS = "users"
 TABLE_MOVIES = "movies"
-TABLE_MOVIES_WATCHED = "movies_watched"
+TABLE_MOVIES_WATCHED = "movies_watchlist"
 
 
 def db_connection(db_name):
@@ -87,6 +87,7 @@ def register_new_user(user, password):
 
 
 #  2 --- LOGIN
+
 def authenticate_user(user, password_inserted):
 
     """Function to authenticate user that was already registered onto DB"""
@@ -109,6 +110,8 @@ def authenticate_user(user, password_inserted):
             return False
 
 
+#  3 --- FIND USER_ID FROM USERNAME
+
 def find_id(user):
 
     """Function to find user_id"""
@@ -123,6 +126,8 @@ def find_id(user):
     else:
         return result[0]
 
+
+#  4 --- CHECK IF USERNAME ALREADY EXISTS
 
 def lookup_username(username):
 
@@ -139,25 +144,17 @@ def lookup_username(username):
             return True
         else:
             return False
-        # return result[0]
 
 
-lookup_username("hello")
-#  3 --- FETCH ALL 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
-
-
+#  5 --- FETCH ALL 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
 
 def get_movies_watched(current_user):
 
     """Function to fetch movies already registered by user as "already watched", so
-    it does not shows on the recommendation list again. Should be used to be compared against
-    the list of recommendations before showcasing it to the user -- if user has marked the movie
-    as already watched, do not show the recommendation again"""
+    the user can be shown films on their watchlist"""
 
-    list_of_movies_watched = []
-    movie_ids = []
     query = f"""SELECT m.movie_id, m.movie_name, m.movie_detail, m.movie_poster_path
-                from users u, movies m, movies_watched mw
+                from users u, movies m, movies_watchlist mw
                 where mw.user_id = u.user_id AND mw.movie_id = m.movie_id 
                 AND u.user_id = {current_user};"""
     try:
@@ -179,7 +176,31 @@ def get_movies_watched(current_user):
 
 
 # print(get_movies_watched(1))
-#  4 --- ADD NEW MOVIE ON 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
+
+
+#  6 --- FETCH ALL MOVIE IDS FOR 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
+
+def check_movies_watched(current_user):
+
+    """Function to fetch movie IDS for movies already registered by user as "already watched", so
+    it does not shows on the recommendation list again. Should be used to be compared against
+    the list of recommendations before showcasing it to the user -- if user has marked the movie
+    as already watched, do not show the recommendation again"""
+
+    movie_ids = []
+    query = f"""SELECT mw.movie_id from movies_watchlist mw
+                where mw.user_id = {current_user};"""
+    try:
+        result = read_db(query, fetchall=True)
+    except Exception:
+        raise ConnectionRefusedError("Not found movies already watched for this user.")
+    else:
+        for line in result:
+            movie_ids.append(line[0])
+        return movie_ids
+
+
+#  7 --- ADD NEW MOVIE ON 'MOVIES ALREADY WATCHED' FROM CURRENT USER LOGGED IN
 
 def insert_movie_watched(current_user_id, movie_id, movie_name, movie_detail, movie_poster_path):
 
@@ -195,14 +216,13 @@ def insert_movie_watched(current_user_id, movie_id, movie_name, movie_detail, mo
     except Exception:
         raise ConnectionRefusedError("Could not add this movie to list of movies.")
 
-    query_b = f"""INSERT IGNORE INTO movies_watched (user_id, movie_id)
+    query_b = f"""INSERT IGNORE INTO movies_watchlist (user_id, movie_id)
                 VALUES ({current_user_id}, {movie_id});"""
     try:
         query_db(query_b)   # add movie to attached to user's list of watched movies
     except Exception:
         raise ConnectionRefusedError("Could not add this movie to list of movies already watched")
     else:
-        print(f" Movie {movie_name} successfully added as already watched by user {current_user_id}.")
         return movie_id
 
 

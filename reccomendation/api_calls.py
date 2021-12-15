@@ -1,4 +1,4 @@
-import requests
+import requests  # <------ import requests
 
 
 class PrepForAPI:  # sorts the data into the correct format to make the API call

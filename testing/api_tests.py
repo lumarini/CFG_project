@@ -1,5 +1,5 @@
 import unittest
-from api_calls import PrepForAPI, CallingAPI, SortingAPI
+from reccomendation.api_calls import PrepForAPI, CallingAPI, SortingAPI
 
 
 class TestPrepForAPI(unittest.TestCase):

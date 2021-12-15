@@ -17,7 +17,7 @@ CREATE TABLE movies (
     PRIMARY KEY (movie_id)
 );
 
-CREATE TABLE movies_watched (
+CREATE TABLE movies_watchlist (
 	mw_id INT NOT NULL AUTO_INCREMENT,
     movie_id INT, 
     user_id INT,
