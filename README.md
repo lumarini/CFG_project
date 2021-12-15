@@ -21,3 +21,8 @@ API
 Database
 - mysql-connector
 - mysql-connector-python
+
+
+in database.db_config input your password and make sure user is correct
+
+open DB_movie_recommendations.sql in MySQLWorkbench and run it
