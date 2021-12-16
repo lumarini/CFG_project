@@ -119,7 +119,6 @@ class CallingAPI(PrepForAPI):
         self.result = []
         self.films = []
 
-
     def api_call(self):
         # calls the api, if any of the categories are blank, the call will still be made, the results just won't be
         # filtered on the category
@@ -129,6 +128,7 @@ class CallingAPI(PrepForAPI):
               f"&with_runtime.lte={super().upper_runtime()}&with_keywords={super().keywords()}"
         print(url)
         response = requests.get(url)
+        print(response)
         response.raise_for_status()
         self.result = response.json()
         self.films = self.result["results"]
