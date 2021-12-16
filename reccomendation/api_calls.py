@@ -79,13 +79,11 @@ class PrepForAPI:  # sorts the data into the correct format to make the API call
     def lower_runtime(self):  # Returns the chosen lower runtime
         if not self.chosen_lower_runtime:
             self.chosen_lower_runtime = ""
-        print(f" the lower runtime: {self.chosen_lower_runtime}")
         return str(self.chosen_lower_runtime)
 
     def upper_runtime(self):  # Returns the chosen lower runtime
         if not self.chosen_upper_runtime:
             self.chosen_upper_runtime = ""
-        print(f" the upper runtime: {self.chosen_upper_runtime}")
         return str(self.chosen_upper_runtime)
 
     def keywords(self):
@@ -126,9 +124,7 @@ class CallingAPI(PrepForAPI):
               f"&sort_by=popularity.desc&certification_country=GB&certification={super().age_ratings()}" \
               f"&with_genres={super().genres()}&with_runtime.gte={super().lower_runtime()}" \
               f"&with_runtime.lte={super().upper_runtime()}&with_keywords={super().keywords()}"
-        print(url)
         response = requests.get(url)
-        print(response)
         response.raise_for_status()
         self.result = response.json()
         self.films = self.result["results"]

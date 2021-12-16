@@ -329,10 +329,6 @@ def display_results(form, logged_in_status):
     results = result.displaying_data()
     keywords = True
     no_keyword_message = ""
-    print("hi")
-    print(results)
-    print("hi")
-    print(len(results))
     if not results and form.keywords.data:
         result = DisplayingAPI(form.rating.data, form.genre.data, form.lower_run_time.data, form.lower_run_time.data,
                                "")
@@ -400,8 +396,6 @@ def display_results(form, logged_in_status):
 
     result_list = []
     count = 0
-    print(len(count_list))
-    print(form.number_of_results.data)
 
     if len(count_list) == 3:
         while len(result_list) < 3:
