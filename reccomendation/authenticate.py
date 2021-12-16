@@ -83,7 +83,7 @@ class Authenticate:
 		return self.genre_mes
 
 	def lower_runtime(self):  # Returns the chosen lower runtime
-		if not self.lower_chosen_runtime:
+		if not self.lower_chosen_runtime or self.lower_chosen_runtime == "":
 			return True
 		try:
 			int(self.lower_chosen_runtime)
@@ -101,7 +101,7 @@ class Authenticate:
 		return self.lower_runtime_mes
 
 	def upper_runtime(self):  # Returns the chosen lower runtime
-		if not self.lower_chosen_runtime:
+		if not self.upper_chosen_runtime or self.upper_chosen_runtime == "":
 			return True
 		try:
 			int(self.upper_chosen_runtime)

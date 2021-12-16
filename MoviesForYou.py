@@ -57,7 +57,7 @@ def adding_to_watchlist_button_1():
             results
         current_film_id = results[count_list[0]]["ID"]
         current_film_name = results[count_list[0]]["Name"]
-        current_film_detail = results[count_list[0]]["Description"]
+        current_film_detail = results[count_list[0]]["Description"].replace('"', '')
         current_film_poster = results[count_list[0]]["Poster"]
 
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
@@ -77,7 +77,7 @@ def adding_to_watchlist_button_2():
             results
         current_film_id = results[count_list[1]]["ID"]
         current_film_name = results[count_list[1]]["Name"]
-        current_film_detail = results[count_list[1]]["Description"]
+        current_film_detail = results[count_list[1]]["Description"].replace('"', '')
         current_film_poster = results[count_list[1]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -96,7 +96,7 @@ def adding_to_watchlist_button_3():
             results
         current_film_id = results[count_list[2]]["ID"]
         current_film_name = results[count_list[2]]["Name"]
-        current_film_detail = results[count_list[2]]["Description"]
+        current_film_detail = results[count_list[2]]["Description"].replace('"', '')
         current_film_poster = results[count_list[2]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -115,7 +115,7 @@ def adding_to_watchlist_button_4():
             results
         current_film_id = results[count_list[3]]["ID"]
         current_film_name = results[count_list[3]]["Name"]
-        current_film_detail = results[count_list[3]]["Description"]
+        current_film_detail = results[count_list[3]]["Description"].replace('"', '')
         current_film_poster = results[count_list[3]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -134,7 +134,7 @@ def adding_to_watchlist_button_5():
             results
         current_film_id = results[count_list[4]]["ID"]
         current_film_name = results[count_list[4]]["Name"]
-        current_film_detail = results[count_list[4]]["Description"]
+        current_film_detail = results[count_list[4]]["Description"].replace('"', '')
         current_film_poster = results[count_list[4]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -153,7 +153,7 @@ def adding_to_watchlist_button_6():
             results
         current_film_id = results[count_list[5]]["ID"]
         current_film_name = results[count_list[5]]["Name"]
-        current_film_detail = results[count_list[5]]["Description"]
+        current_film_detail = results[count_list[5]]["Description"].replace('"', '')
         current_film_poster = results[count_list[5]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -172,7 +172,7 @@ def adding_to_watchlist_button_7():
             results
         current_film_id = results[count_list[6]]["ID"]
         current_film_name = results[count_list[6]]["Name"]
-        current_film_detail = results[count_list[6]]["Description"]
+        current_film_detail = results[count_list[6]]["Description"].replace('"', '')
         current_film_poster = results[count_list[6]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -191,7 +191,7 @@ def adding_to_watchlist_button_8():
             results
         current_film_id = results[count_list[7]]["ID"]
         current_film_name = results[count_list[7]]["Name"]
-        current_film_detail = results[count_list[7]]["Description"]
+        current_film_detail = results[count_list[7]]["Description"].replace('"', '')
         current_film_poster = results[count_list[7]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -210,7 +210,7 @@ def adding_to_watchlist_button_9():
             results
         current_film_id = results[count_list[8]]["ID"]
         current_film_name = results[count_list[8]]["Name"]
-        current_film_detail = results[count_list[8]]["Description"]
+        current_film_detail = results[count_list[8]]["Description"].replace('"', '')
         current_film_poster = results[count_list[8]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -229,7 +229,7 @@ def adding_to_watchlist_button_10():
             results
         current_film_id = results[count_list[9]]["ID"]
         current_film_name = results[count_list[9]]["Name"]
-        current_film_detail = results[count_list[9]]["Description"]
+        current_film_detail = results[count_list[9]]["Description"].replace('"', '')
         current_film_poster = results[count_list[9]]["Poster"]
         insert_movie_watched(user_id, current_film_id, current_film_name, current_film_detail, current_film_poster)
         flash(f'{current_film_name} has successfully been added to watchlist!', 'success')
@@ -383,7 +383,7 @@ def display_results(form, logged_in_status):
             count_list = [0]
 
         elif int(form.number_of_results.data) == 10 and len(results) >= 10:
-            count_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            count_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
         elif (int(form.number_of_results.data) == 5 and len(results) >= 5) or (int(form.number_of_results.data) == 10
                                                                                and len(results) >= 5):
@@ -396,7 +396,6 @@ def display_results(form, logged_in_status):
 
     result_list = []
     count = 0
-
     if len(count_list) == 3:
         while len(result_list) < 3:
             result_list.append(results[count_list[count]])
@@ -415,7 +414,6 @@ def display_results(form, logged_in_status):
     else:
         result_list.append(results[count_list[count]])
         page = 'what_to_watch_1_results.html'
-
     if not result_list:
         no_result_message = "There are no results for those options"
         return render_template('what_to_watch.html', title='What To Watch', form=form,
@@ -424,9 +422,11 @@ def display_results(form, logged_in_status):
         page = 'what_to_watch_1_results.html'
 
     different_result_message = ""
+
     if len(result_list) != int(form.number_of_results.data):
         different_result_message = f"This search didn't produce {int(form.number_of_results.data)} results, here are " \
                                    f"the available ones"
+
     # if any of the info provided doesn't match the available options, the relevant error message iis shown, along with
     # the results which aren't filtered by the incorrect info
     return render_template(page, title='What To Watch', form=form, result_list=result_list, genre_error=genre_error,
@@ -446,10 +446,11 @@ def check_login_success(this_login_success):
 
 
 def check_films(films, results, count):
+    current_id = results[count]["ID"]
     for film in films:
-        if film == results[count]["ID"]:
+        if film == current_id:
             count = count + 1
-            check_films(films, results, count)
+            count = check_films(films, results, count)
     return count
 
 

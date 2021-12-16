@@ -120,15 +120,23 @@ class CallingAPI(PrepForAPI):
     def api_call(self):
         # calls the api, if any of the categories are blank, the call will still be made, the results just won't be
         # filtered on the category
-        url = f"https://api.themoviedb.org/3/discover/movie?api_key=43c96095652d8dd6ac3f404242b593fe" \
-              f"&sort_by=popularity.desc&certification_country=GB&certification={super().age_ratings()}" \
-              f"&with_genres={super().genres()}&with_runtime.gte={super().lower_runtime()}" \
-              f"&with_runtime.lte={super().upper_runtime()}&with_keywords={super().keywords()}"
-        response = requests.get(url)
-        response.raise_for_status()
-        self.result = response.json()
-        self.films = self.result["results"]
-        return response.status_code
+        num = 1
+        rating = super().age_ratings()
+        genres = super().genres()
+        lower_runtime = super().lower_runtime()
+        upper_runtime = super().upper_runtime()
+        keywords = super().keywords()
+        while num < 6:
+            url = f"https://api.themoviedb.org/3/discover/movie?api_key=43c96095652d8dd6ac3f404242b593fe" \
+                  f"&sort_by=popularity.desc&page={num}&certification_country=GB&certification={rating}" \
+                  f"&with_genres={genres}&with_runtime.gte={lower_runtime}" \
+                  f"&with_runtime.lte={upper_runtime}&with_keywords={keywords}"
+            response = requests.get(url)
+            response.raise_for_status()
+            self.result = response.json()
+            for film in self.result["results"]:
+                self.films.append(film)
+            num = num + 1
 
 
 class SortingAPI(CallingAPI):

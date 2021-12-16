@@ -141,7 +141,7 @@
             </form>
         </td>
         <td style="vertical-align: top; padding: 20px;">
-            <h3>{{ result_lists[2].Name }}</h3>
+            <h3>{{ result_list[2].Name }}</h3>
             <p>{{ result_list[2].Description }}</p>
             <img src="{{ result_list[2].Poster }}" alt="Movie Poster" width="200">
             {{ add_to_watchlist.hidden_tag() }}
@@ -210,9 +210,9 @@
     </tr>
     <tr>
         <td style="vertical-align: top; padding: 20px;">
-            <h3>{{ results[9].Name }}</h3>
-            <p>{{ results[9].Description }}</p>
-            <img src="{{ results[9].Poster }}" alt="Movie Poster" width="200">
+            <h3>{{ result_list[9].Name }}</h3>
+            <p>{{ result_list[9].Description }}</p>
+            <img src="{{ result_list[9].Poster }}" alt="Movie Poster" width="200">
             {{ add_to_watchlist.hidden_tag() }}
             <form method="POST" action="/adding_to_watchlist_button_10">
                 {{ add_to_watchlist.submit(class="btn btn-outline-info") }}
