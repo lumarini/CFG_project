@@ -303,8 +303,9 @@ def login():
 def logout():
     # user is logged out
     global login_success, current_username
-    login_success = False
-    flash(f'You have been logged out from {current_username}', 'success')
+    if login_success:
+        login_success = False
+        flash(f'You have been logged out from {current_username}', 'success')
     return redirect(url_for('home'))
 
 
