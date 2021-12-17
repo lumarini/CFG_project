@@ -9,7 +9,7 @@ and here for MAC users:
 
 https://pythonbasics.org/execute-python-scripts/
 
-Packages you will need to run the MoviesForYou.pu
+Packages you will need to run the MoviesForYou.py
 
 Front-end
 - Flask 
