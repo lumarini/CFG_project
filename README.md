@@ -9,7 +9,7 @@ and here for MAC users:
 
 https://pythonbasics.org/execute-python-scripts/
 
-Packages you will need to run the MoviesForYou.pu
+Packages you will need to run the MoviesForYou.py
 
 Front-end
 - Flask 
@@ -20,17 +20,6 @@ API
 
 Database
 - mysql-connector-python
-
-#### Instructions for installing mysql-connector-python with pycharm
-First go into database.db_connection.py and hover over mysql
-
-![Pycharm mySQL Instructions pt1](pycharm_mysql_instructions/pycharm_mysql_instructions_pt1.png "Pycharm mySQL Instructions pt1")
-
-Then click more actions
-
-![Pycharm mySQL Instructions pt2](pycharm_mysql_instructions/pycharm_mysql_instructions_pt2.png "Pycharm mySQL Instructions pt2")
-
-Finally select the second option down which says "Install package mysql-connector-python"
 
 
 in database.db_config input your password and make sure user is correct
