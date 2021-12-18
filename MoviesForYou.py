@@ -49,6 +49,81 @@ def what_to_watch():
         return display_results(form, logged_in_status)
 
 
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    global login_success, current_username
+    logged_in_status = check_login_success(login_success)
+    form = RegistrationForm()
+    username_doesnt_exist = lookup_username(form.username.data)
+    if not username_doesnt_exist:
+        # if username already exists, prompts to try another one
+        message = f"{form.username.data} is already taken, try another username"
+        return render_template('register.html', title='Register', form=form, logged_in_status=logged_in_status,
+                               message=message)
+    else:
+        # if username doesn't already exist, creates account with details provided
+        if form.validate_on_submit():
+            register_new_user(form.username.data, form.password.data)
+            flash(f'Account has successfully been created for {form.username.data}!', 'success')
+            return redirect(url_for('home'))
+        return render_template('register.html', title='Register', form=form, logged_in_status=logged_in_status)
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    global login_success, current_username, user_id
+    logged_in_status = check_login_success(login_success)
+    form = LoginForm()
+    if form.validate_on_submit():
+        info = authenticate_user(form.username.data, form.password.data)
+        if info:
+            # if info provided is correct, user is logged in
+            login_success = True
+            user_id = find_id(form.username.data)
+            current_username = form.username.data
+            flash(f'Account has successfully been logged in for {form.username.data}!', 'success')
+            return redirect(url_for('home'))
+        else:
+            # if info provided is incorrect, user is prompted to try again
+            flash(f"A user with that information doesn't exist, please try again", "warning")
+    return render_template('login.html', title='Login', form=form, logged_in_status=logged_in_status)
+
+
+@app.route("/logout")
+def logout():
+    # user is logged out
+    global login_success, current_username
+    if login_success:
+        login_success = False
+        flash(f'You have been logged out from {current_username}', 'success')
+    return redirect(url_for('home'))
+
+
+@app.route("/watchlist")
+def watchlist():
+    global login_success, current_username, user_id
+    if login_success:
+        # if logged in display films in their watchlist
+        logged_in_status = f"Logged in as {current_username}"
+        films = get_movies_watched(user_id)
+        if not films:
+            flash('Your watchlist is currently empty, add films here', 'warning')
+            return redirect(url_for('what_to_watch'))
+        else:
+            return render_template('watchlist.html', title='Watchlist', films=films, logged_in_status=logged_in_status)
+
+    else:
+        # if not logged in redirect to login page
+        flash(f'Login to view your watchlist', 'warning')
+        return redirect(url_for('login'))
+
+
+########################################################################################################################
+########################################################################################################################
+# WATCHLIST BUTTONS
+
+# individual buttons that  add the correct film to your watchlist, depending on which one you click on
+
 @app.route("/adding_to_watchlist_button_1", methods=['GET', 'POST'])
 def adding_to_watchlist_button_1():
     if login_success:
@@ -240,82 +315,14 @@ def adding_to_watchlist_button_10():
         return redirect(url_for('login'))
 
 
-@app.route("/watchlist")
-def watchlist():
-    global login_success, current_username, user_id
-    if login_success:
-        # if logged in display films in their watchlist
-        logged_in_status = f"Logged in as {current_username}"
-        films = get_movies_watched(user_id)
-        if not films:
-            flash('Your watchlist is currently empty, add films here', 'warning')
-            return redirect(url_for('what_to_watch'))
-        else:
-            return render_template('watchlist.html', title='Watchlist', films=films, logged_in_status=logged_in_status)
-
-    else:
-        # if not logged in redirect to login page
-        flash(f'Login to view your watchlist', 'warning')
-        return redirect(url_for('login'))
-
-
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    global login_success, current_username
-    logged_in_status = check_login_success(login_success)
-    form = RegistrationForm()
-    username_doesnt_exist = lookup_username(form.username.data)
-    if not username_doesnt_exist:
-        # if username already exists, prompts to try another one
-        message = f"{form.username.data} is already taken, try another username"
-        return render_template('register.html', title='Register', form=form, logged_in_status=logged_in_status,
-                               message=message)
-    else:
-        # if username doesn't already exist, creates account with details provided
-        if form.validate_on_submit():
-            register_new_user(form.username.data, form.password.data)
-            flash(f'Account has successfully been created for {form.username.data}!', 'success')
-            return redirect(url_for('home'))
-        return render_template('register.html', title='Register', form=form, logged_in_status=logged_in_status)
-
-
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    global login_success, current_username, user_id
-    logged_in_status = check_login_success(login_success)
-    form = LoginForm()
-    if form.validate_on_submit():
-        info = authenticate_user(form.username.data, form.password.data)
-        if info:
-            # if info provided is correct, user is logged in
-            login_success = True
-            user_id = find_id(form.username.data)
-            current_username = form.username.data
-            flash(f'Account has successfully been logged in for {form.username.data}!', 'success')
-            return redirect(url_for('home'))
-        else:
-            # if info provided is incorrect, user is prompted to try again
-            flash(f"A user with that information doesn't exist, please try again", "warning")
-    return render_template('login.html', title='Login', form=form, logged_in_status=logged_in_status)
-
-
-@app.route("/logout")
-def logout():
-    # user is logged out
-    global login_success, current_username
-    if login_success:
-        login_success = False
-        flash(f'You have been logged out from {current_username}', 'success')
-    return redirect(url_for('home'))
-
-
 ########################################################################################################################
 ########################################################################################################################
 # FUNCTIONS
 
 def display_results(form, logged_in_status):
+    # if sorts through the partially sorted results and then displays the relevant ones
     global results, login_success, user_id, count_list
-    # info is checked to see if it matches any of the available options
+    # info is checked to see if it matches any of the available options and displays the relevant error message if not
     auth = Authenticate(form.rating.data, form.genre.data, form.lower_run_time.data, form.upper_run_time.data)
     genre_result = auth.genres()
     age_rating_result = auth.age_ratings()
@@ -330,22 +337,24 @@ def display_results(form, logged_in_status):
     results = result.displaying_data()
     keywords = True
     no_keyword_message = ""
-    if not results and form.keywords.data:
+    if not results and form.keywords.data:  # if no results are found with the keywords, returns results that satisfy
+        # the rest of the criteria but excluding the keyword
         result = DisplayingAPI(form.rating.data, form.genre.data, form.lower_run_time.data, form.lower_run_time.data,
                                "")
         results = result.displaying_data()
         keywords = False
         no_keyword_message = "There were no results with those keywords, here are some excluding them"
-        if not results:
+        if not results:    # If there are still no results, informs the user of that
             no_result_message = "There are no results for those options"
             return render_template('what_to_watch.html', title='What To Watch', form=form,
-                           logged_in_status=logged_in_status, no_result_message=no_result_message)
+                                   logged_in_status=logged_in_status, no_result_message=no_result_message)
     elif not results:
         no_result_message = "There are no results for those options"
         return render_template('what_to_watch.html', title='What To Watch', form=form,
-                           logged_in_status=logged_in_status, no_result_message=no_result_message)
+                               logged_in_status=logged_in_status, no_result_message=no_result_message)
     add_to_watchlist = AddToWatchlist()
-    if login_success:
+    if login_success:  # If the user is logged in, checks the results against the films on their watchlist and doesn't
+        # show them if they already appear there
         films_watched = check_movies_watched(user_id)
         count_list = []
         count = 0
@@ -397,7 +406,8 @@ def display_results(form, logged_in_status):
 
     result_list = []
     count = 0
-    if len(count_list) == 3:
+    if len(count_list) == 3:  # the relevant results are added to a list and the page containing the correct number of
+        # results is shown
         while len(result_list) < 3:
             result_list.append(results[count_list[count]])
             count = count + 1
@@ -424,7 +434,8 @@ def display_results(form, logged_in_status):
 
     different_result_message = ""
 
-    if len(result_list) != int(form.number_of_results.data):
+    if len(result_list) != int(form.number_of_results.data):  # if there aren't enough results to show the chosen number
+        # the ones that are available are shown
         different_result_message = f"This search didn't produce {int(form.number_of_results.data)} results, here are " \
                                    f"the available ones"
 
@@ -438,6 +449,7 @@ def display_results(form, logged_in_status):
 
 
 def check_login_success(this_login_success):
+    # whether the user is logged inis checked and shown at the top of each webpage
     if this_login_success:
         global current_username
         logged_in_status = f"Logged in as {current_username}"
@@ -446,16 +458,18 @@ def check_login_success(this_login_success):
     return logged_in_status
 
 
-def check_films(films, results, count):
-    current_id = results[count]["ID"]
+def check_films(films, these_results, count):  # each film in the films watched by the user is checked against the films
+    # recommended to the user and if they match, the process begins again with that position in the list being
+    # disregarded
+    current_id = these_results[count]["ID"]
     for film in films:
         if film == current_id:
             count = count + 1
-            count = check_films(films, results, count)
+            count = check_films(films, these_results, count)
     return count
 
 
 if __name__ == '__main__':
     global login_success
-    login_success = False
+    login_success = False  # the user is always logged out when the program first starts
     app.run(debug=True)
