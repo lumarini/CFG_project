@@ -1,11 +1,37 @@
 body {
-  background: #fafafa;
+  background: #292727;
+  font-family: Brandon Grotesque;
+  src: url('BGREG.otf');
+  color: #444;
   color: #333333;
-  margin-top: 5rem;
+  margin-top: 100px;
+  max-width: 900px;
+  margin: auto;
+  padding: 100px 0 0 0;
+  text-align: center
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #444444;
+h1, h2, h3, h6 {
+  color: #f78484;
+}
+h4 {
+  color: #84b2f7;
+}
+
+h5 {
+  color: #a584ff;
+}
+
+.button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 
 .bg-steel {
@@ -26,7 +52,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .content-section {
   background: #ffffff;
-  padding: 10px 20px;
+  max-width: 500px;
+  margin: auto;
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
@@ -78,3 +105,5 @@ a.article-title:hover {
 .account-heading {
   font-size: 2.5rem;
 }
+
+
