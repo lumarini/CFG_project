@@ -60,9 +60,9 @@ class Authenticate:
 			self.genres_list = self.chosen_genres.split(", ")
 			for chosen_genre in self.genres_list:
 				self.capitalize_genres.append(chosen_genre.title())
-			available_genres = ["Action", "Adventure", "Animation", "Comedy" "Crime", "Documentary", "Drama", "Family",
-			                    "Fantasy", "History", "Horror", "Music", "Romance", "Science Fiction", "TV Movie",
-			                    "Thriller", "War", "Western"]
+			available_genres = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Family",
+								"Fantasy", "History", "Horror", "Music", "Romance", "Science Fiction", "TV Movie",
+								"Thriller", "War", "Western"]
 
 			incorrect_genre = []
 			for chosen_genre in self.capitalize_genres:

@@ -22,9 +22,29 @@ h5 {
   color: #a584ff;
 }
 
-.button {
+p {
+  color: #6c757d;
+}
+
+a {
+  color: #6c757d;
+}
+
+.error {
+  color: #f78484;
+}
+
+.instructions {
+  color: #6c757d;
+}
+
+.result {
+  color: #a584ff;
+}
+
+.btn {
   border: none;
-  color: white;
+  color: #84b2f7;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;

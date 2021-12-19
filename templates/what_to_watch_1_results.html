@@ -1,8 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<p> </p>
-{{ logged_in_status }}
-<p> </p>
+<p> {{ logged_in_status }} </p>
     <h3>Find the movie you want to watch down below!</h3>
     <br>
     <div class="content-section">
@@ -10,7 +8,7 @@
             {{ form.hidden_tag() }}
             <fieldset class="form-group mb-4">
                 <legend class="border-bottom mb-4">What To Watch</legend>
-                <h6>Seperate multiple answers with a comma and space e.g. Horror, Comedy</h6>
+                <h6 class="instructions">Separate multiple answers with a comma and space e.g. Horror, Comedy</h6>
                 <div class="form-group mb-4">
                     {{ form.genre.label(class="form-control-label") }}
                     {% if form.genre.errors %}
@@ -24,7 +22,7 @@
                         {{ form.genre(class="form-control form-control-lg") }}
                     {% endif %}
                     {% if not genre_result %}
-                        <p>{{ genre_error }}</p>
+                        <p class="error">{{ genre_error }}</p>
                     {% endif %}
                 </div>
                 <div class="form-group mb-4">
@@ -40,7 +38,7 @@
                         {{ form.rating(class="form-control form-control-lg") }}
                     {% endif %}
                     {% if not age_rating_result %}
-                        <p>{{ age_rating_error }}</p>
+                        <p class="error">{{ age_rating_error }}</p>
                     {% endif %}
                 </div>
                 <div class="form-group mb-4">
@@ -56,7 +54,7 @@
                         {{ form.lower_run_time(class="form-control form-control-lg") }}
                     {% endif %}
                     {% if not lower_runtime_result %}
-                        <p>{{ lower_runtime_error }}</p>
+                        <p class="error">{{ lower_runtime_error }}</p>
                     {% endif %}
                 </div>
                 <div class="form-group mb-4">
@@ -72,7 +70,7 @@
                         {{ form.upper_run_time(class="form-control form-control-lg") }}
                     {% endif %}
                     {% if not upper_runtime_result %}
-                        <p>{{ upper_runtime_error }}</p>
+                        <p class="error">{{ upper_runtime_error }}</p>
                     {% endif %}
                 </div>
 
@@ -113,15 +111,15 @@
 <div>
     <p> </p>
         {% if not keywords %}
-            {{ no_keyword_message }}
+            <p class="error"> {{ no_keyword_message }} </p>
         {% endif %}
     <p> </p>
     <p> </p>
-        {{ different_result_message }}
+    <p class="error"> {{ different_result_message }} </p>
     <p> </p>
 </div>
 <div>
-    <h3>{{ result_list[0].Name }}</h3>
+    <h3 class="result">{{ result_list[0].Name }}</h3>
     <p>{{ result_list[0].Description }}</p>
     <img src="{{ result_list[0].Poster }}" alt="Movie Poster" width="200">
     {{ add_to_watchlist.hidden_tag() }}

@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<p> {{ logged_in_status }} </p>
     <div class="content-section">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
@@ -16,6 +17,9 @@
                         </div>
                     {% else %}
                         {{ form.username(class="form-control form-control-lg") }}
+                    {% endif %}
+                    {% if not username_exists %}
+                        <p class="error">{{ message }}</p>
                     {% endif %}
                 </div>
 
