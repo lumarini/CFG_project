@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<p> {{ logged_in_status }} </p>
+<body></body>
+    <h1>Movies For You - What's it all about?</h1>
+    <img src="static/films_for_you.png" height="267"/>
+    <br>
+    <h2> Movies For You is a movie recommendation app that allows users to find movies they 
+        want to watch - whatever the occassion!</h2>
+
+    <h3></h3>
+    <br>
+
+    </form>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            <a class="ml-2" href="{{ url_for('what_to_watch') }}">Let's go pick a movie!</a>
+        </small>
+    </div>
+<br>
+<h4>Brought to you by...</h4>
+<br> </br>
+</body>
+{% for post in posts %}
+        <h5>{{ post.name }}</h5>
+        <p>About me: {{ post.about_me }}</p>
+        <p>My favourite movie is: {{ post.fav_movie }}</p>
+    {% endfor %}
+{% endblock content %}
