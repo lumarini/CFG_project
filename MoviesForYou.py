@@ -342,7 +342,7 @@ def display_results(form, logged_in_status):
     no_keyword_message = ""
     if not results and form.keywords.data:  # if no results are found with the keywords, returns results that satisfy
         # the rest of the criteria but excluding the keyword
-        result = DisplayingAPI(form.rating.data, form.genre.data, form.lower_run_time.data, form.lower_run_time.data,
+        result = DisplayingAPI(form.rating.data, form.genre.data, form.lower_run_time.data, form.upper_run_time.data,
                                "")
         results = result.displaying_data()
         keywords = False
