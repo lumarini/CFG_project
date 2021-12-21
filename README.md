@@ -1,5 +1,6 @@
 # CFG_project
-CFG project - Group 4 - Films For You
+
+CFG Project - Group 4 - Films For You
 
 Films For You is a movie recommendation app that allows users to discover new and exciting films, for whatever the occassion.
 
@@ -8,11 +9,13 @@ Packages you will need to import in order to run FilmsForYou.py
 Front-end
 - Flask 
 - Flask-WTF
+- WTForms
 
 API
 - requests
 
 Database
+- mysql-connector
 - mysql-connector-python
 
 -----------------------------------------------------------------------------------------------------------------------------
