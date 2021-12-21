@@ -33,3 +33,8 @@ To view the app, here is a simple tutorial on how to run a python file in the co
 and here for MAC users:
 
 - https://pythonbasics.org/execute-python-scripts/
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+Created by: Saamiya Yousuf, Luciana Marini, Lizzie Wren, Lowena Hull, Annie Ding, Maebh Ni Ghuairim
+
