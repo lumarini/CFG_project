@@ -1,15 +1,9 @@
 # CFG_project
-CFG project - Group 4 - Movies For You
+CFG project - Group 4 - Films For You
 
-Saamiya - To view the app, here is a simple tutorial on how to run a python file in the command prompt on Windows:
+Films For You is a movie recommendation app that allows users to discover new and exciting films, for whatever the occassion.
 
-https://www.wikihow.com/Use-Windows-Command-Prompt-to-Run-a-Python-File
-
-and here for MAC users:
-
-https://pythonbasics.org/execute-python-scripts/
-
-Packages you will need to run the MoviesForYou.py
+Packages you will need to import in order to run FilmsForYou.py
 
 Front-end
 - Flask 
@@ -21,7 +15,18 @@ API
 Database
 - mysql-connector-python
 
+-----------------------------------------------------------------------------------------------------------------------------
 
-in database.db_config input your password and make sure user is correct
+In database.db_config input your password and make sure user is correct
 
 open DB_movie_recommendations.sql in MySQLWorkbench and run it
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+To view the app, here is a simple tutorial on how to run a python file in the command prompt on Windows:
+
+- https://www.wikihow.com/Use-Windows-Command-Prompt-to-Run-a-Python-File
+
+and here for MAC users:
+
+- https://pythonbasics.org/execute-python-scripts/
