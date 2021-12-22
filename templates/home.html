@@ -3,24 +3,25 @@
 <p> {{ logged_in_status }} </p>
 <body></body>
     <h1>Films For You - What's it all about?</h1>
-    <!-- <blockquote class="imgur-embed-pub" lang="en" data-id="a/Twm6Cmh" data-context="false" ><a href="//imgur.com/a/Twm6Cmh">filmsfor you</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>    <img src="https://imgur.com/a/Twm6Cmh" alt="Films For You"> -->
     <img src="static/films_for_you.png" height="267"/>
     <br>
-    <!-- https://www.imgur.com/a/Twm6Cmh -->
     <h2> Films For You is a movie recommendation app that allows users to find movies they 
         want to watch - whatever the occasion!</h2>
 
     <h3></h3>
     <br>
+    <!-- Draft buttton -->
     <!-- <button type="button">Click here to start picking  a film! </button> -->
     <!-- <form method="get" action= what_to_watch()>
         <input type="submit" value="Let's go pick a movie"> -->
     </form>
-    <div class="border-top pt-3">
+    <div> <a href="{{ url_for('what_to_watch') }}" class="btn btn-info" role="button">Let's go pick a movie!</a> </div>
+   
+    <!-- <div class="border-top pt-3">
         <small class="text-muted">
-            <a class="ml-2" href="{{ url_for('what_to_watch') }}">Let's go pick a movie!</a>
+            <a class="ml-1" href="{{ url_for('what_to_watch') }}">Let's go pick a movie!</a>
         </small>
-    </div>
+    </div> -->
 <br>
 <h4>Brought to you by...</h4>
 <br> </br>
@@ -28,6 +29,8 @@
 {% for post in posts %}
         <h5>{{ post.name }}</h5>
         <p>About me: {{ post.about_me }}</p>
-        <p>My favourite movie is: {{ post.fav_movie }}</p>
+        <p2>My favourite movie is: {{ post.fav_movie }}
+
+        </p2>
     {% endfor %}
 {% endblock content %}

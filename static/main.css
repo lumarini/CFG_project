@@ -20,9 +20,14 @@ h4 {
 
 h5 {
   color: #a584ff;
+  font-weight: bold;
 }
 
 p {
+  color: #586d80;
+}
+
+p2 {
   color: #6c757d;
 }
 
